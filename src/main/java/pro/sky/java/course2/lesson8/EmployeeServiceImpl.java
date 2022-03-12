@@ -2,18 +2,18 @@ package pro.sky.java.course2.lesson8;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final ArrayList<Employee> employeeSet;
+    private final Set<Employee> employeeSet;
 
     public EmployeeServiceImpl() {
-        this.employeeSet = new ArrayList<>();
+        this.employeeSet = new HashSet<>();
     }
 
     public Employee createEmployee(String firstName, String lastName, Double salary, Integer departmentId) {
@@ -21,45 +21,51 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public boolean addEmployee(String firstName, String lastName, Double salary, Integer departmentId) {
-        return employeeSet.add(createEmployee(firstName, lastName, salary, departmentId));
+    public Employee addEmployee(String firstName, String lastName, Double salary, int departmentId) {
+        employeeSet.add(createEmployee(firstName, lastName, salary, departmentId));
+        return createEmployee(firstName, lastName, salary, departmentId);
     }
 
     @Override
-    public boolean removeEmployee(String firstName, String lastName, Double salary, Integer departmentId) {
+    public boolean removeEmployee(String firstName, String lastName, Double salary, int departmentId) {
         return employeeSet.remove(createEmployee(firstName, lastName, salary, departmentId));
     }
 
+
     @Override
-    public Employee findDepartmentMaxSalary(Integer departmentId) {
+    public Employee findDepartmentMaxSalary(int departmentId) {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .max(Comparator.comparingDouble(employee -> employee.getSalary()))
-                .get();
+                .orElseThrow(NotFoundEmployeeException::new);
     }
 
     @Override
-    public Employee findDepartmentMinSalary(Integer departmentId) {
+    public Employee findDepartmentMinSalary(int departmentId) {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .min(Comparator.comparingDouble(employee -> employee.getSalary()))
-                .get();
+                .orElseThrow(NotFoundEmployeeException::new);
     }
 
     @Override
-    public List<String> printDepartmentEmployees(Integer departmentId) {
+    public Set<String> printDepartmentEmployees(int departmentId) {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .map(employee -> employee.getFirstName() + " " + employee.getLastName())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<String> printEmployeesByDepartment() {
+    public Set<String> printEmployeesByDepartment() {
         return employeeSet.stream()
                 .sorted(Comparator.comparing(Employee::getDepartmentId))
                 .map(employee -> employee.getFirstName() + " " + employee.getLastName() + " departmentId" + employee.getDepartmentId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Employee> getAllEmployees() {
+        return new HashSet<>(employeeSet);
     }
 }
-
