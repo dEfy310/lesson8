@@ -10,29 +10,29 @@ import java.util.Set;
 @RestController
 @RequestMapping("/department")
 public class EmployeeDepartmentController {
-    private final EmployeeService employeeServiceImpl;
+    private final EmployeeService employeeService;
 
     public EmployeeDepartmentController(EmployeeService employeeServiceImpl) {
-        this.employeeServiceImpl = employeeServiceImpl;
+        this.employeeService = employeeServiceImpl;
     }
 
-    @GetMapping(path = "/max-salary")
+    @GetMapping("/max-salary")
     public Employee findDepartmentMaxSalary(@RequestParam Integer departmentId) {
-        return employeeServiceImpl.findDepartmentMaxSalary(departmentId);
+        return employeeService.findDepartmentMaxSalary(departmentId);
     }
 
-    @GetMapping(path = "/min-salary")
+    @GetMapping("/min-salary")
     public Employee findDepartmentMinSalary(@RequestParam Integer departmentId) {
-        return employeeServiceImpl.findDepartmentMinSalary(departmentId);
+        return employeeService.findDepartmentMinSalary(departmentId);
     }
 
-    @GetMapping(path = "/all/department")
-    public Set<String> printDepartmentEmployees(@RequestParam Integer departmentId) {
-        return employeeServiceImpl.printDepartmentEmployees(departmentId);
+    @GetMapping("/all/department")
+    public Set<String> getDepartmentEmployees(@RequestParam Integer departmentId) {
+        return employeeService.getDepartmentEmployees(departmentId);
     }
 
-    @GetMapping(path = "/all")
-    public Set<String> printEmployeesByDepartment() {
-        return employeeServiceImpl.printEmployeesByDepartment();
+    @GetMapping("/all")
+    public Set<String> getEmployeesByDepartment() {
+        return employeeService.getEmployeesByDepartment();
     }
 }

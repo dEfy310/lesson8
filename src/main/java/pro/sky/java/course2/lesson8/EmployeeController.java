@@ -11,27 +11,27 @@ import java.util.Set;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private final EmployeeService employeeServiceImpl;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeServiceImpl) {
-        this.employeeServiceImpl = employeeServiceImpl;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
 
     @GetMapping("/add")
     public Employee addEmployee(@RequestParam String firstName, @RequestParam String lastName,
                                 @RequestParam Double salary, @RequestParam Integer departmentId) {
-        return employeeServiceImpl.addEmployee(firstName, lastName, salary, departmentId);
+        return employeeService.addEmployee(firstName, lastName, salary, departmentId);
     }
 
     @GetMapping("/remove")
     public boolean removeEmployee(@RequestParam String firstName, @RequestParam String lastName,
                                   @RequestParam Double salary, @RequestParam Integer departmentId) {
-        return employeeServiceImpl.removeEmployee(firstName, lastName, salary, departmentId);
+        return employeeService.removeEmployee(firstName, lastName, salary, departmentId);
     }
 
     @GetMapping
     public Set<Employee> getAllEmployees() {
-        return employeeServiceImpl.getAllEmployees();
+        return employeeService.getAllEmployees();
     }
 }

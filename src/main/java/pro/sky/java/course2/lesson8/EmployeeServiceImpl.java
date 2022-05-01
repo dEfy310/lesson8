@@ -22,8 +22,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, Double salary, int departmentId) {
-        employeeSet.add(createEmployee(firstName, lastName, salary, departmentId));
-        return createEmployee(firstName, lastName, salary, departmentId);
+        Employee employee = createEmployee(firstName, lastName, salary, departmentId);
+        employeeSet.add(employee);
+        return employee;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .max(Comparator.comparingDouble(employee -> employee.getSalary()))
-                .orElseThrow(NotFoundEmployeeException::new);
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
@@ -45,11 +46,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .min(Comparator.comparingDouble(employee -> employee.getSalary()))
-                .orElseThrow(NotFoundEmployeeException::new);
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
-    public Set<String> printDepartmentEmployees(int departmentId) {
+    public Set<String> getDepartmentEmployees(int departmentId) {
         return employeeSet.stream()
                 .filter(employee -> employee.getDepartmentId().equals(departmentId))
                 .map(employee -> employee.getFirstName() + " " + employee.getLastName())
@@ -57,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Set<String> printEmployeesByDepartment() {
+    public Set<String> getEmployeesByDepartment() {
         return employeeSet.stream()
                 .sorted(Comparator.comparing(Employee::getDepartmentId))
                 .map(employee -> employee.getFirstName() + " " + employee.getLastName() + " departmentId" + employee.getDepartmentId())
